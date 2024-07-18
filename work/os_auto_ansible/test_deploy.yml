@@ -1,0 +1,48 @@
+---
+- name: make working dir
+  hosts: servers
+  become: yes
+  tasks:
+    - name: mkdir -p gogo
+      shell: "mkdir -p {{ dir_path }}"
+
+- name: Deploy os_config_auto scripts to multiple servers
+  hosts: 192.168.56.10
+  become: yes
+  vars:
+    dir_path: "{{ playbook_dir }}"
+  tasks:
+    - name: Copy scripts to servers
+      copy:
+        src: "{{ dir_path }}/{{ item.src }}"
+        dest: "{{ dir_path }}/{{ item.dest }}"
+        mode: "{{ item.mode | default('0755') }}"
+      delegate_to: "{{ item.server }}"
+      with_items:
+        - { src: 'os_config_auto_first.sh', dest: 'os_config_auto_first.sh', server: '192.168.56.11' }
+        - { src: 'os_config_auto_first.sh', dest: 'os_config_auto_first.sh', server: '192.168.56.12' }
+        - { src: 'os_config_auto_second.sh', dest: 'os_config_auto_second.sh', server: '192.168.56.11' }
+        - { src: 'os_config_auto_second.sh', dest: 'os_config_auto_second.sh', server: '192.168.56.12' }
+        - { src: 'os_config_auto_three.sh', dest: 'os_config_auto_three.sh', server: '192.168.56.11' }
+        - { src: 'os_config_auto_three.sh', dest: 'os_config_auto_three.sh', server: '192.168.56.12' }
+        - { src: 'os_config_auto_four.sh', dest: 'os_config_auto_four.sh', server: '192.168.56.11' }
+        - { src: 'os_config_auto_four.sh', dest: 'os_config_auto_four.sh', server: '192.168.56.12' }
+        - { src: 'os_config_auto_five.sh', dest: 'os_config_auto_five.sh', server: '192.168.56.11' }
+        - { src: 'os_config_auto_five.sh', dest: 'os_config_auto_five.sh', server: '192.168.56.12' }
+        - { src: 'os_config_auto_six.sh', dest: 'os_config_auto_six.sh', server: '192.168.56.11' }
+        - { src: 'os_config_auto_six.sh', dest: 'os_config_auto_six.sh', server: '192.168.56.12' }
+        - { src: 'docker_auto_download.sh', dest: 'docker_auto_download.sh', server: '192.168.56.11' }
+        - { src: 'docker_auto_download.sh', dest: 'docker_auto_download.sh', server: '192.168.56.12' }
+        - { src: 'pipline_check.txt', dest: 'pipline_check.txt', mode: '0644', server: '192.168.56.11' }
+        - { src: 'pipline_check.txt', dest: 'pipline_check.txt', mode: '0644', server: '192.168.56.12' }
+        - { src: 'ubuntu22.04_os_auto_pipline.sh', dest: 'ubuntu22.04_os_auto_pipline.sh', server: '192.168.56.11' }
+        - { src: 'ubuntu22.04_os_auto_pipline.sh', dest: 'ubuntu22.04_os_auto_pipline.sh', server: '192.168.56.12' }
+        - { src: 'ubuntu22.04_auto_daemon.sh', dest: 'ubuntu22.04_auto_daemon.sh', server: '192.168.56.11' }
+        - { src: 'ubuntu22.04_auto_daemon.sh', dest: 'ubuntu22.04_auto_daemon.sh', server: '192.168.56.12' }
+
+- name: Run ubuntu22.04_auto_daemon.sh on servers
+  hosts: servers
+  become: yes
+  tasks:
+    - name: Run script on servers
+      shell: "{{ dir_path }}/ubuntu22.04_auto_daemon.sh"
