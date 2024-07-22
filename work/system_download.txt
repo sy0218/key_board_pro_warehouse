@@ -7,3 +7,10 @@
 [dataDir=]|/data/sy0218/apache-zookeeper-3.7.2-bin/data
 [clientPort=]|2181
 -----------------------[zoo.cfg-end]-----------------------
+
+[postgresql_data_directory]|/pgdb/pg_data
+-----------------------[postgresql.conf-start]-----------------------
+[data_directory]|'/pgdb/pg_data'
+[listen_addresses]|'*'
+[port]|5432
+-----------------------[postgresql.conf-end]-----------------------

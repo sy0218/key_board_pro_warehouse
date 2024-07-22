@@ -1,0 +1,12 @@
+#/bin/bash
+
+sy_DB_HOST="192.168.56.10"
+sy_DB_PORT="5432"
+sy_DB_USER="sy0218"
+sy_DB_PASSWORD="sy0218"
+
+sql_exec() {
+        psql postgresql://${sy_DB_USER}:${sy_DB_PASSWORD}@${sy_DB_HOST}:${sy_DB_PORT}/sy0218 -tAF $'\t' --no-align -P "footer=off" << EOF
+        ${1}
+EOF
+}
